@@ -3,7 +3,7 @@ import time
 import random
 import string
 from typing import List
-
+import logging
 COMPANY_NAMES: List[str] = ['dell', 'php', 'gg', 'hello', 'stocks']
 
 
@@ -23,11 +23,14 @@ def generate_stocks() -> list[Stocks]:
 
 
 def main():
-    while True:
-        stock_list: list[Stocks] = generate_stocks()
-        for company_price in stock_list:
-            print(company_price.price)
-        time.sleep(60)
+    try:
+        while True:
+            stock_list: list[Stocks] = generate_stocks()
+            for company_price in stock_list:
+                print(company_price.price)
+                logging.info(company_price.price)
+    except KeyboardInterrupt:
+        logging.info("Interrupted! Exiting gracefully...")
 
 
 if __name__ == "__main__":
