@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "price-generate-service"
+version = "0.1"
+description = "price generator"
+authors = ["MohanadGad38 <90938419+MohanadGad38@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
