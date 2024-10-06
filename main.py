@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 import time
 import random
+import string
+from typing import List
+
+COMPANY_NAMES: List[str] = ['dell', 'php', 'gg', 'hello', 'stocks']
 
 
 @dataclass
@@ -9,25 +13,21 @@ class Stocks:
     price: float
 
 
-def main():
+def generate_stocks() -> list[Stocks]:
     stocks_list: list[Stocks] = []
-    dell: Stocks = Stocks("dell", 5)
-    stocks_list.append(dell)
-    php: Stocks = Stocks("php", 10)
-    stocks_list.append(php)
-    pepsi: Stocks = Stocks("pepsi", 10)
-    stocks_list.append(pepsi)
-    cola: Stocks = Stocks("cola", 20)
-    stocks_list.append(cola)
-    lm: Stocks = Stocks("lm", 21)
-    stocks_list.append(lm)
+    for company in COMPANY_NAMES:
+        random_price: float = random.uniform(1, 5000)
+        random_company: Stocks = Stocks(company, random_price)
+        stocks_list.append(random_company)
+    return stocks_list
+
+
+def main():
     while True:
-        random_float: float = random.uniform(0, 100000)
-        for i in range(len(stocks_list)):
-            stocks_list[i].price = random_float
-            print(stocks_list[i].company_name)
-            print(stocks_list[i].price)
-            time.sleep(60)
+        stock_list: list[Stocks] = generate_stocks()
+        for company_price in stock_list:
+            print(company_price.price)
+        time.sleep(60)
 
 
 if __name__ == "__main__":
