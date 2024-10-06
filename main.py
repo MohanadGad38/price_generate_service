@@ -5,6 +5,8 @@ import string
 from typing import List
 import logging
 COMPANY_NAMES: List[str] = ['dell', 'php', 'gg', 'hello', 'stocks']
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 @dataclass
@@ -29,6 +31,7 @@ def main():
             for company_price in stock_list:
                 print(company_price.price)
                 logging.info(company_price.price)
+            time.sleep(10)
     except KeyboardInterrupt:
         logging.info("Interrupted! Exiting gracefully...")
 
