@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: bash -c "python3 -u main.py"
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - rabbitmq
+    networks:
+      - database_network 
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=M
+      - RABBITMQ_DEFAULT_PASS=YOUR_PASSWORD
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+
+
+
+
+
+networks:
+  database_network:
+    driver: bridge  

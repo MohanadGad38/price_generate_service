@@ -12,4 +12,4 @@ RUN poetry install
 
 COPY .  .
 RUN chmod +x main.py
-CMD ["python3","-u","main.py"]
+# CMD ["python3","-u","main.py"]
