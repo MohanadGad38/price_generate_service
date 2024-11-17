@@ -1,9 +1,31 @@
 from dataclasses import dataclass
 import time
 import random
-import string
 from typing import List
 import logging
+import pika
+from pika.adapters.blocking_connection import BlockingChannel
+import pika.connection
+import json
+credentials = pika.PlainCredentials('', '')
+connection_params = pika.ConnectionParameters(
+    host='localhost',
+    port=5672,
+    virtual_host='/',
+    credentials=credentials
+)
+connection = pika.BlockingConnection(connection_params)
+channel: BlockingChannel = connection.channel()
+channel.exchange_declare(exchange='Stocks', exchange_type='direct')
+test = {"id": 1, "email": "mohanad.gad"}
+channel.basic_publish(exchange='Stocks', routing_key="stock.price",
+                      body=json.dumps({"email": test['email']}))
+print('message sent')
+channel.basic_publish(
+    exchange="Stocks", routing_key="stock.info", body=json.dumps(test))
+print("message")
+connection.close()
+
 COMPANY_NAMES: List[str] = ['dell', 'php', 'gg', 'hello', 'stocks']
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
