@@ -7,7 +7,7 @@ import pika
 from pika.adapters.blocking_connection import BlockingChannel
 import pika.connection
 import json
-credentials = pika.PlainCredentials('', '')
+credentials = pika.PlainCredentials('mohanad.gad', '19941994')
 connection_params = pika.ConnectionParameters(
     host='localhost',
     port=5672,
