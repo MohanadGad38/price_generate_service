@@ -7,7 +7,13 @@ import pika
 from pika.adapters.blocking_connection import BlockingChannel
 import pika.connection
 import json
-credentials = pika.PlainCredentials('mohanad.gad', '19941994')
+from dotenv import load_dotenv
+import os
+load_dotenv('rabbitmq.env')
+
+
+credentials = pika.PlainCredentials(os.environ.get(
+    "RABBITMQ_DEFAULT_USER"), os.environ.get("RABBITMQ_DEFAULT_PASS"))
 connection_params = pika.ConnectionParameters(
     host='localhost',
     port=5672,
@@ -17,18 +23,16 @@ connection_params = pika.ConnectionParameters(
 connection = pika.BlockingConnection(connection_params)
 channel: BlockingChannel = connection.channel()
 channel.exchange_declare(exchange='Stocks', exchange_type='direct')
-test = {"id": 1, "email": "mohanad.gad"}
-channel.basic_publish(exchange='Stocks', routing_key="stock.price",
-                      body=json.dumps({"email": test['email']}))
-print('message sent')
-channel.basic_publish(
-    exchange="Stocks", routing_key="stock.info", body=json.dumps(test))
-print("message")
-connection.close()
+
 
 COMPANY_NAMES: List[str] = ['dell', 'php', 'gg', 'hello', 'stocks']
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def send(name: str, price: str):
+    channel.basic_publish(exchange='Stocks', routing_key="stock.price",
+                          body=json.dumps({"company": name, "stock_price": price}))
 
 
 @dataclass
@@ -51,10 +55,11 @@ def main():
         while True:
             stock_list: list[Stocks] = generate_stocks()
             for company_price in stock_list:
-                print(company_price.price)
+                send(company_price.company_name, company_price.price)
                 logging.info(company_price.price)
             time.sleep(10)
     except KeyboardInterrupt:
+        connection.close()
         logging.info("Interrupted! Exiting gracefully...")
 
 
